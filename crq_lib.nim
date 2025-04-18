@@ -28,3 +28,11 @@ proc get_current_values_crq*(params:seq[string], url: string, user: string, pass
             res_table[tmp_seq[0]] = Crq_value(time:tmp_seq[1],value:tmp_seq[2],state:tmp_seq[3])
     result = res_table
 
+proc get_spec_info*(req:string, url: string, user: string, pass: string): string =
+    var
+        http_C = newHttpClient()
+        get_req: string = url & fmt"/crq?req={req}"
+    if user == "":
+        http_C.headers["Authorization"] = "Basic " & base64.encode(user & ":" & pass)
+    
+    result = http_C.getContent(get_req)
